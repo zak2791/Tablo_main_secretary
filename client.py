@@ -10,7 +10,7 @@ class TcpClient(QtCore.QObject):
     def __init__(self, mat, parent= None):
         QtCore.QObject.__init__(self, parent)
         #self.s.settimeout(1)
-        self.port = int(mat) * 1000
+        self.port = int(mat) * 2000 + 2
         self.addr = ""
         self.data = None
 

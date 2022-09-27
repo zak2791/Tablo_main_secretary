@@ -9,7 +9,7 @@ class UdpServer(QtCore.QObject):
         QtCore.QObject.__init__(self, parent)
         self.s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.s.settimeout(3)
-        self.s.bind(("", int(mat) * 10000))
+        self.s.bind(("", int(mat) * 2000))
         self.process = True
         self.mat = mat
 
@@ -34,7 +34,7 @@ class TcpServer(QtCore.QObject):
         QtCore.QObject.__init__(self, parent)
         self.s = socket.socket()
         self.s.settimeout(3)
-        self.s.bind(("", int(mat) * 1111))
+        self.s.bind(("", int(mat) * 2000 + 3))
         self.s.listen(1)
         self.process = True
 
