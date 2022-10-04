@@ -24,6 +24,7 @@ class TcpClient(QtCore.QObject):
         try:
             sock = socket.socket()
             sock.settimeout(2)
+            print("addr = ", (self.addr, self.port))
             sock.connect((self.addr, self.port))
             sock.send(bytes(self.data, "utf-8"))
             data = sock.recv(1024)
@@ -32,6 +33,7 @@ class TcpClient(QtCore.QObject):
             cur = con.cursor()
             try:
                 sql = "UPDATE rounds SET sent = 1 WHERE id = " + data.decode()
+                print("sql = ", sql)
                 cur.execute(sql)
                 con.commit()
                 self.sigSend.emit(data.decode())

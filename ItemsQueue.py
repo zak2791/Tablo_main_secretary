@@ -159,12 +159,21 @@ class RoundFights(QtWidgets.QWidget):
         
     def paintEvent(self, e):
         painter = QtGui.QPainter(self)
+        if not self.sent:
+            painter.setFont(QtGui.QFont("Arial", 10))
+        else:
+            f = QtGui.QFont("Arial", 10)
+            f.setBold(True)
+            painter.setFont(f)
+        painter.drawText(0, 0, self.width(), 40, QtCore.Qt.AlignCenter, self.rnd)
         if self.sent:
-            painter.setBrush(QtCore.Qt.white)
+            #painter.setBrush(QtCore.Qt.white)
+            pen = QtGui.QPen(QtCore.Qt.red)
+            pen.setWidth(2)
+            painter.setPen(pen)
         painter.drawRoundedRect(0, 0, self.width() - 20, self.height() - 1, 15.0, 15.0)
         #painter.setPen(QtCore.Qt.black)
-        painter.setFont(QtGui.QFont("Arial", 10))
-        painter.drawText(0, 0, self.width(), 40, QtCore.Qt.AlignCenter, self.rnd)
+        
         
         
         painter.drawLine(0, 40, self.width() - 20, 40)

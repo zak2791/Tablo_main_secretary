@@ -524,9 +524,14 @@ class MainWindow(QtWidgets.QWidget):
         '''
 
     def pixData(self, d):
+        print("pixdata len = ", len(d))
         pix = QtGui.QPixmap()
-        fight = str(d[0])
+        print("1")
+        #fight = str(d[0])
+        fight = chr(int(d[0]))    #.decode()
+        print("2", fight)
         data = d[1:]
+        print("3")
         con = sqlite3.connect("bazaFights.db")
         cur = con.cursor()
         sql = "SELECT * FROM fights WHERE fight = " + fight
@@ -534,7 +539,7 @@ class MainWindow(QtWidgets.QWidget):
             cur.execute(sql)
             res = cur.fetchone()
             if res == None:
-                cur.execute("INSERT INTO fights (fight, result) VALUES (?, ?)", (d[0], data))
+                cur.execute("INSERT INTO fights (fight, result) VALUES (?, ?)", (int(fight), data))
                 con.commit()
             else:
                 sql = "UPDATE fights SET result = ? WHERE fight = " + fight
@@ -546,7 +551,9 @@ class MainWindow(QtWidgets.QWidget):
             cur.close()
             con.close()
         obj = self.findChild(Fight, fight)
+        print("4")
         obj.setPix(data)
+        print("5")
         
     def sendEvent(self, s):
         r = self.findChild(RoundFights, s)
@@ -554,7 +561,9 @@ class MainWindow(QtWidgets.QWidget):
         
     def connection(self, b, s):
         if b:
+            #print("s = ", s)
             self.tcpAddress = s
+            print("tcp")
             self.lblConnect.setText(u"Ковер " + str(self.mat)[2])
             self.lblConnect.setStyleSheet("QLabel{border-style: solid; border-width: 2px; border-color: green; color:green;border-radius:5px;font-size: 12px}")
             self.btnSendData.setEnabled(True)
@@ -635,7 +644,7 @@ class MainWindow(QtWidgets.QWidget):
 
                 cursor.close()
                 conn.close()
-
+                print("data = ", str_rounds)
                 self.tcpClient.setData(self.tcpAddress, str_rounds)        
                 self.tcpThread.start()
                 self.tcpThread.quit()

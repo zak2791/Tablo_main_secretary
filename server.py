@@ -9,20 +9,30 @@ class UdpServer(QtCore.QObject):
         QtCore.QObject.__init__(self, parent)
         self.s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.s.settimeout(3)
-        self.s.bind(("", int(mat) * 2000))
+        self.s.bind(("", int(mat) * 2000 + 1))
         self.process = True
         self.mat = mat
+        #print("self.mat = ", self.mat)
 
     def run(self):
         while self.process:
             try:
                 b = self.s.recvfrom(256)
-                print(b[1][0])
+                print(b)
                 if b[0] == self.mat:
-                    self.s.sendto(b[0], b[1])
+                    addr = (b[1][0], int(self.mat) * 2000)
+                    #print("addr = ", addr)
+                    self.s.sendto(b[0], addr)
+                    #print("sended")
                     self.sigConn.emit(True, b[1][0])
+                    #strk = "signal = " + b[1][0] + "\n"
+                    #print(strk)
             except socket.timeout:
                 self.sigConn.emit(False, "")
+            except ConnectionResetError:
+                #print("err")
+                pass
+                
         self.s.close()
         
     def stopProcess(self):
@@ -42,24 +52,28 @@ class TcpServer(QtCore.QObject):
         while self.process:
             try:
                 conn, addr = self.s.accept()
+                print("tcp accept", conn, addr)
                 conn.settimeout(0.3)
                 try:
                     d = b''
                     while True:
                         data = conn.recv(1024)
+                        #print("data = ", data)
                         if not data: break
                         d += data
                     
-                    print(len(d))
+                    #print(len(d))
                     self.sigData.emit(d)
                 except socket.timeout:
                     print("tcp conn timeout")
+                    #pass
                     
                 finally:
                     conn.close()
                 
             except socket.timeout:
                 print("tcp server timeout")
+                pass
 
         self.s.close()
         
