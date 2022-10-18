@@ -53,20 +53,24 @@ class TcpServer(QtCore.QObject):
             try:
                 conn, addr = self.s.accept()
                 print("tcp accept", conn, addr)
-                conn.settimeout(0.3)
-                try:
-                    d = b''
+                conn.settimeout(1)
+                d = b''
+                try:      
                     while True:
                         data = conn.recv(1024)
                         #print("data = ", data)
                         if not data: break
                         d += data
                     
-                    #print(len(d))
+                    print("len(d) = ", len(d))
                     self.sigData.emit(d)
+                    conn.send(bytes("ok", "utf-8"))
                 except socket.timeout:
                     print("tcp conn timeout")
-                    #pass
+                    if d != b'':
+                        #print("data = ", data)
+                        self.sigData.emit(d)
+                        conn.send(bytes("ok", "utf-8"))
                     
                 finally:
                     conn.close()

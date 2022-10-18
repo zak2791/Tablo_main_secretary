@@ -528,7 +528,9 @@ class MainWindow(QtWidgets.QWidget):
         pix = QtGui.QPixmap()
         print("1")
         #fight = str(d[0])
-        fight = chr(int(d[0]))    #.decode()
+        #fight = chr(int(d[0]))    #.decode()
+        
+        fight = str(d[0])
         print("2", fight)
         data = d[1:]
         print("3")

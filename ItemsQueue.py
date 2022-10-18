@@ -36,31 +36,94 @@ class ViewFight(QtWidgets.QSplashScreen):
                 painter = QtGui.QPainter()
                 if painter.begin(printer):
                     font = QtGui.QFont()
-                    font.setPixelSize(20)
+                    font.setPixelSize(14)
                     painter.setFont(font)
                     # Реализованное окно просмотра
                     rect = painter.viewport()
-                    #print(rect)
+                    print("rect = ", rect)
+                    #ширина листа
+                    widthSheet = rect.size().width()
+                    #высота листа
+                    heightSheet = rect.size().height()
+                    #необходимая высота картинки
+                    heightPix = 0
+                    if widthSheet / heightSheet > 1:
+                        heightPix = int(heightSheet / 5)
+                    else:
+                        heightPix = int(heightSheet / 10)
+
+                    print("heightPix = ", heightPix)
+
+                    heightPix = self.pix.height()
+
+                    #pix = self.pix.scaledToHeight(heightPix)
+                    widthPix = self.pix.width()
+                    arrPix = []
+                    #currentX = 0
+                    if widthPix > widthSheet:
+                        wRight = int(0.15 * widthPix)
+                        wLeft = int(0.7 * widthPix)
+                        arrPix.append(self.pix.copy(0,                 0,   wLeft, heightPix))
+                        arrPix.append(self.pix.copy(widthPix - wRight, 0,  wRight, heightPix))                     
+                        '''
+                        if widthSheet < 0.75 * widthPix:
+                            arrPix.append(self.pix.copy(0, 0, widthSheet, heightPix))
+                            arrPix.append(self.pix.copy(widthSheet, 0, widthPix - widthSheet, heightPix))
+                        else:
+                            w = int(0.75 * widthPix)
+                            arrPix.append(self.pix.copy(0, 0, w, heightPix))
+                            arrPix.append(self.pix.copy(widthSheet, 0, widthPix - w, heightPix))
+                            '''
+                    else:
+                        arrPix.append(pix)
+                                                       
+                    #pix = self.pix.scaled(heightPix, widthSheet, QtCore.Qt.KeepAspectRatio)
                     # Получите размер картинки
                     size = self.pix.size()
-                    #print(size)
-                    size.scale(rect.size(), QtCore.Qt.KeepAspectRatio)
-                    #print(size)
+                    print("size = ", size)
+                    #size.scale(rect.size(), QtCore.Qt.KeepAspectRatio)
+                    #pix = self.pix.scaledToWidth(rect.size().width())
+                    #pix = self.pix.copy(0, 0, widthSheet, size.height())
+                    print("size = ", size)
                     # Установить свойства окна просмотра
-                    painter.setViewport(rect.x() + 20, rect.y(), size.width() - 20, size.height())
+                    #painter.setViewport(rect.x(), rect.y(), size.width(), size.height())
                     #print(painter.viewport())
 
                     # Установите размер окна под размер картинки и нарисуйте картинку в окне
-                    painter.setWindow(self.pix.rect())
+                    #painter.setWindow(self.pix.rect())
+                    #painter.setWindow(QtCore.QRect(0, 0, 297, 210))
                     #print("1")
                     text = "ПРОТОКОЛ\n боя по рукопашному бою\n" + category[1] + ", " \
                                                                  + category[2] + ", " \
                                                                  + category[3] + ", " \
                                                                  + category[4]
                     #print(text)
-                    painter.drawText(QtCore.QRectF(20, 0, 1073, 100), text,
+                    painter.drawText(QtCore.QRectF(0, 0, rect.width(), 100), text,
                                      QtGui.QTextOption(QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter))
-                    painter.drawPixmap(0, 100, self.pix)
+                    currentY = 100
+                    '''
+                    for each in arrPix:
+                        painter.drawPixmap(0, currentY, each)
+                        currentY += heightPix + 10
+                    '''
+
+                    if len(arrPix) == 1:
+                        painter.drawPixmap(0, currentY, arrPix[0])
+                    else:
+                        painter.drawPixmap(0,                   currentY, arrPix[0])
+                        painter.drawPixmap(widthSheet - wRight, currentY, arrPix[1])
+
+                    print("each")
+
+                    text = "Руководитель ковра           _______________________\n\n" \
+                           "Рефери                       _______________________\n\n" \
+                           "Боковой судья                _______________________\n\n" \
+                           "Технический секретарь        _______________________"
+
+                    print(text)
+
+                    painter.drawText(QtCore.QRectF(50, currentY + heightPix + 50, rect.width(), 150), text,
+                                     QtGui.QTextOption(QtCore.Qt.AlignLeft | QtCore.Qt.AlignTop))
                     
                     painter.end()
                     #painter.drawText(0, 0, "hello")

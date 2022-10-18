@@ -2,3 +2,6 @@ __pycache__/
 build/
 dist/
 Табло_секретарь/
+Табло_секретарь_27_09_22/
+baza.db
+bazaFights.db
