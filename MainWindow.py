@@ -558,6 +558,7 @@ class MainWindow(QtWidgets.QWidget):
         print("5")
         
     def sendEvent(self, s):
+        print("s = ", s)
         r = self.findChild(RoundFights, s)
         r.setSent()
         

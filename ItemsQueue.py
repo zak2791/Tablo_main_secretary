@@ -47,6 +47,7 @@ class ViewFight(QtWidgets.QSplashScreen):
                     heightSheet = rect.size().height()
                     #необходимая высота картинки
                     heightPix = 0
+                    
                     if widthSheet / heightSheet > 1:
                         heightPix = int(heightSheet / 5)
                     else:
@@ -60,11 +61,16 @@ class ViewFight(QtWidgets.QSplashScreen):
                     widthPix = self.pix.width()
                     arrPix = []
                     #currentX = 0
+                    mainPix = self.pix.scaledToWidth(widthSheet, QtCore.Qt.SmoothTransformation)
                     if widthPix > widthSheet:
                         wRight = int(0.15 * widthPix)
-                        wLeft = int(0.7 * widthPix)
-                        arrPix.append(self.pix.copy(0,                 0,   wLeft, heightPix))
-                        arrPix.append(self.pix.copy(widthPix - wRight, 0,  wRight, heightPix))                     
+                        wCenter = int(0.71 * widthPix)
+                        wLeft = int(0.14 * widthPix)
+                        arrPix.append(self.pix.copy(0, 0, wLeft, heightPix))
+                        centerPix = self.pix.copy(wLeft, 0, wCenter, heightPix)
+                        centerPix = centerPix.scaledToWidth(widthSheet - wRight - wLeft, QtCore.Qt.SmoothTransformation)
+                        arrPix.append(centerPix)
+                        arrPix.append(self.pix.copy(widthPix - wRight, 0, wRight, heightPix))                     
                         '''
                         if widthSheet < 0.75 * widthPix:
                             arrPix.append(self.pix.copy(0, 0, widthSheet, heightPix))
@@ -106,13 +112,15 @@ class ViewFight(QtWidgets.QSplashScreen):
                         painter.drawPixmap(0, currentY, each)
                         currentY += heightPix + 10
                     '''
-
+                    '''
                     if len(arrPix) == 1:
                         painter.drawPixmap(0, currentY, arrPix[0])
                     else:
                         painter.drawPixmap(0,                   currentY, arrPix[0])
-                        painter.drawPixmap(widthSheet - wRight, currentY, arrPix[1])
-
+                        painter.drawPixmap(wLeft,               currentY, arrPix[1])
+                        painter.drawPixmap(widthSheet - wRight, currentY, arrPix[2])
+                    '''
+                    painter.drawPixmap(0, currentY, mainPix)
                     print("each")
 
                     text = "Руководитель ковра           _______________________\n\n" \
@@ -122,7 +130,7 @@ class ViewFight(QtWidgets.QSplashScreen):
 
                     print(text)
 
-                    painter.drawText(QtCore.QRectF(50, currentY + heightPix + 50, rect.width(), 150), text,
+                    painter.drawText(QtCore.QRectF(50, currentY + mainPix.height() + 50, rect.width(), 150), text,
                                      QtGui.QTextOption(QtCore.Qt.AlignLeft | QtCore.Qt.AlignTop))
                     
                     painter.end()
