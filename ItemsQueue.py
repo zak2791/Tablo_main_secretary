@@ -11,7 +11,7 @@ class ViewFight(QtWidgets.QSplashScreen):
         print(p)
         self.setGeometry(50, 50, p.width(), p.height())
         self.setPixmap(p)
-        self.pix = p
+        self.pix = pix
         self.objName = name
 
     def mousePressEvent(self, e):
