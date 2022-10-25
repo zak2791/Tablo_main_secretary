@@ -5,9 +5,13 @@ import sqlite3
 class ViewFight(QtWidgets.QSplashScreen):
     def __init__(self, pix, name, parent=None):
         QtWidgets.QSplashScreen.__init__(self, parent)
-        self.setGeometry(50, 50, pix.width(), pix.height())
-        self.setPixmap(pix)
-        self.pix = pix
+        screen = QtWidgets.QApplication.primaryScreen()
+        width = screen.geometry().width()
+        p = pix.scaledToWidth(width, QtCore.Qt.SmoothTransformation)
+        print(p)
+        self.setGeometry(50, 50, p.width(), p.height())
+        self.setPixmap(p)
+        self.pix = p
         self.objName = name
 
     def mousePressEvent(self, e):
