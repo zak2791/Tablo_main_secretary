@@ -18,9 +18,10 @@ def extractDataFromTuple(lst, tpl):
                 if each != None:
                     try:
                         num = str(int(each))
+                        lst.append(num)
                     except:
                         print("error data in table")
-                    lst.append(num)
+                    
 
 class Communicate(QtCore.QObject):
 
