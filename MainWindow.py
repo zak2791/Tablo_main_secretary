@@ -460,7 +460,7 @@ class MainWindow(QtWidgets.QWidget):
                         conn.commit()      
                 except:
                     pass
-                if count > 50:
+                if count > 100:
                     break
 
         try:
