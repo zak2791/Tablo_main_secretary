@@ -643,7 +643,7 @@ class MainWindow(QtWidgets.QWidget):
                         cursor.close()
                         conn.close()
                         return
-                    str_rounds = str_rounds + s
+                    str_rounds = str_rounds + s #+ "&"   #& - знак конца раунда
                 print("str_rounds = ", str_rounds)
 
                 cursor.close()
