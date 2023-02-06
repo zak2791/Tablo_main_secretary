@@ -643,13 +643,13 @@ class MainWindow(QtWidgets.QWidget):
                         cursor.close()
                         conn.close()
                         return
-                    str_rounds = str_rounds + s #+ "&"   #& - знак конца раунда
+                    str_rounds = str_rounds + s 
                 print("str_rounds = ", str_rounds)
 
                 cursor.close()
                 conn.close()
                 print("data = ", str_rounds)
-                self.tcpClient.setData(self.tcpAddress, str_rounds)        
+                self.tcpClient.setData(self.tcpAddress, str_rounds + "&")   #& - знак конца раунда       
                 self.tcpThread.start()
                 self.tcpThread.quit()
                 self.tcpThread.wait()
